@@ -11,18 +11,20 @@ const register = asyncHandler(async (req, res) => {
     if (!email || !password || !firstname || !lastname) {
         return res.status(400).json({
             success: false,
-            mes: 'Missing inputs',
+            mes: 'Thiếu Đầu Vào',
         });
     }
     // if have admin register with this email
     const admin = await Admin.findOne({ email: email });
     if (admin) {
-        throw new Error('Admin has existed !');
+        throw new Error('Email Đã Đăng Ký !');
     } else {
         const newUser = await Admin.create(req.body);
         return res.status(200).json({
             success: newUser ? true : false,
-            mes: newUser ? 'Register is successfully. Please login.' : 'Something went wrong !',
+            mes: newUser
+                ? 'Đăng Ký Thành Công. Vui Lòng Đăng Nhập Lại.'
+                : 'Có Lỗi Xảy Ra, Vui Lòng Liên Hệ Lại NguyenLe!',
         });
     }
 });
@@ -34,7 +36,7 @@ const login = asyncHandler(async (req, res) => {
     if (!email || !password) {
         return res.status(400).json({
             success: false,
-            mes: 'Missing inputs',
+            mes: 'Thiếu Đầu Vào',
             email: email,
             password: password,
         });
@@ -59,22 +61,9 @@ const login = asyncHandler(async (req, res) => {
             httpOnly: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
-        // return res.status(200).json({
-        //     success: true,
-        //     accessToken,
-        //     userData,
-        // });
-
-        // setTimeout(function () {
-        // document.getElementById('bgbgall').style.backgroundColor = 'white';
         return res.redirect('/api/admin/');
-        // }, 5000);
-
-        // history.pushState(null, null, '/api/admin/');
-        // return res.sendFile(path.join(__dirname, '../../Views/views/admin.html'));
     } else {
-        // throw new Error('Invalid credentials!');
-        res.status(401).json({ success: false, message: 'Incorrect email or password' });
+        res.status(401).json({ success: false, message: 'Sai Email Hoặc Mật Khẩu' });
     }
 });
 const getCurrent = asyncHandler(async (req, res) => {
@@ -82,7 +71,7 @@ const getCurrent = asyncHandler(async (req, res) => {
     const admin = await Admin.findById(_id).select('-refreshToken -password -role');
     return res.status(200).json({
         success: admin ? true : false,
-        result: admin ? admin : 'Admin not found',
+        result: admin ? admin : 'Không Tìm Thấy ADMIN',
     });
 });
 
@@ -103,14 +92,13 @@ const refreshAccessToken = asyncHandler(async function (req, res) {
         success: response ? true : false,
         newAccessToken: response
             ? generateAccessToken(response._id, response.role)
-            : 'Refresh token not match !',
+            : 'Refresh token Không Trùng Khớp !',
     });
 });
 
 const logout = asyncHandler(async function (req, res) {
     const cookie = req.cookies;
 
-    console.log(req.cookies);
     // Check xem có đang ở trạng thái đăng nhập không
     if (!cookie || !cookie.refreshToken) {
         throw new Error('No refresh token in cookies');
@@ -122,19 +110,14 @@ const logout = asyncHandler(async function (req, res) {
         { refreshToken: '' },
         { new: true }
     );
-    console.log(req.cookies);
+    // console.log(req.cookies);
 
     // Xoá refresh token ở cookies browser
-    res.clearCookie('refreshToken', {
-        httpOnly: true,
-        secure: true,
+    res.clearCookie('refreshToken');
+    return res.status(200).json({
+        success: true,
+        mes: 'Đã Đăng Xuất !',
     });
-
-    // return res.status(200).json({
-    //     success: true,
-    //     mes: 'Logout is done !',
-    // });
-    return res.redirect('/');
 });
 
 // Client gửi email
@@ -148,11 +131,11 @@ const forgotPassword = asyncHandler(async (req, res) => {
     // Lấy email
     const { email } = req.query;
     // Nếu không có email
-    if (!email) throw new Error('Missing email');
+    if (!email) throw new Error('Không Có email');
     // Nếu có, tìm email trong db và gán vào admin
     const admin = await Admin.findOne({ email });
     // Nếu không thấy admin trùng email
-    if (!admin) throw new Error('Admin not found!');
+    if (!admin) throw new Error('Không Tìm Thấy ADMIN!');
     const resetToken = admin.createPasswordChangeToken();
     // Sau khi dùng hàm tự định nghĩa trong db thì phải gọi hàm save() để lưu data
     await admin.save();
@@ -171,7 +154,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
 const resetPassword = asyncHandler(async (req, res) => {
     const { password, token } = req.body;
-    if (!password || !token) throw new Error('Missing inputs !');
+    if (!password || !token) throw new Error('Thiếu Đầu Vào !');
     const passwordResetToken = crypto.createHash('sha256').update(token).digest('hex');
     const admin = await Admin.findOne({
         passwordResetToken,
@@ -188,47 +171,6 @@ const resetPassword = asyncHandler(async (req, res) => {
         mes: admin ? 'Updated !' : 'Something went wrong !',
     });
 });
-const getUsers = asyncHandler(async (req, res) => {
-    const response = await Admin.find().select('-refreshToken -password -role');
-    return res.status(200).json({
-        success: response ? true : false,
-        users: response,
-    });
-});
-const deleteUser = asyncHandler(async (req, res) => {
-    const { _id } = req.query;
-    if (!_id) throw new Error('Missing inputs !');
-    const response = await Admin.findByIdAndDelete(_id);
-    return res.status(200).json({
-        success: response ? true : false,
-        deleteUser: response
-            ? `Admin with email ${response.email} deleted !`
-            : 'No admin deleted ! ',
-    });
-});
-const updateUser = asyncHandler(async (req, res) => {
-    const { _id } = req.admin;
-    if (!_id || Object.keys(req.body).length === 0) throw new Error('Missing inputs !');
-    const response = await Admin.findByIdAndUpdate(_id, req.body, { new: true }).select(
-        '-password -role -refreshToken'
-    );
-    return res.status(200).json({
-        success: response ? true : false,
-        dupdatedUser: response ? response : 'Somethings went wrong... ',
-    });
-});
-const updateUserByAdmin = asyncHandler(async (req, res) => {
-    const { uid } = req.params;
-    if (Object.keys(req.body).length === 0) throw new Error('Missing inputs !');
-    const response = await Admin.findByIdAndUpdate(uid, req.body, { new: true }).select(
-        '-password -role -refreshToken'
-    );
-    return res.status(200).json({
-        success: response ? true : false,
-        dupdatedUser: response ? response : 'Somethings went wrong... ',
-    });
-});
-
 const renderAdminPage = (req, res) => {
     res.sendFile(path.join(__dirname, '../../Views/views/admin.html'));
 };
@@ -241,9 +183,5 @@ module.exports = {
     logout,
     forgotPassword,
     resetPassword,
-    getUsers,
-    deleteUser,
-    updateUser,
-    updateUserByAdmin,
     renderAdminPage,
 };

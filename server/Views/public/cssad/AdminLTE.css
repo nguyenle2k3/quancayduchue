@@ -448,13 +448,16 @@ a:focus {
 }
 .user-panel > .info {
     font-weight: 600;
+    display: flex;
     /* padding: 5px 5px 5px 15px; */
     text-align: center;
     font-size: 15px;
     line-height: 1;
+    justify-content: center;
 }
 .user-panel > .info > p {
     margin-bottom: -1px;
+    display: inline-block;
 }
 .user-panel > .info > a {
     text-decoration: none;

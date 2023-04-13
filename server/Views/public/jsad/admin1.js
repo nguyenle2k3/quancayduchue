@@ -1,4 +1,3 @@
-// ?
 function openADDnv() {
     closeLogin();
     document.querySelector('.AddNhanVien').classList.add('show');
@@ -58,7 +57,7 @@ function closeLogin() {
         element.classList.remove('show');
     });
 }
-
+// event handler
 window.addEventListener('DOMContentLoaded', function () {
     const outputDiv = document.querySelector('#output');
     const formADDnv = document.querySelector('#addNVform');
@@ -71,85 +70,201 @@ window.addEventListener('DOMContentLoaded', function () {
     const formSUAkm = document.querySelector('#suaKhuyenMaiform');
     const formXoakm = document.querySelector('#xoaKhuyenMaiform');
 
+    // Them Thong tin Nha hang
     formADDnv.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Thêm Thông Tin Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        // dia chi nha hang
+        let name = formADDnv.querySelector('input[name="name"]').value;
+        // so dien thoai
+        let phoneNumber = formADDnv.querySelector('input[name="phone-number"]').value;
+        // Email
+        let email = formADDnv.querySelector('input[name="email"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/information/add';
+        xhttp.open('POST', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ name, phoneNumber, email });
+        xhttp.send(data);
     });
 
+    // Sua Thong tin Nha hang
     formSuanv.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Sửa Thông Tin Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        // dia chi nha hang
+        let name = formSuanv.querySelector('input[name="name"]').value;
+        // so dien thoai
+        let phoneNumber = formSuanv.querySelector('input[name="phone-number"]').value;
+        // Email
+        let email = formSuanv.querySelector('input[name="email"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/information/update';
+        xhttp.open('PUT', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ name, phoneNumber, email });
+        xhttp.send(data);
     });
 
+    // Xoa Thong tin Nha hang
     formXoanv.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Xóa Thông Tin Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        let form = document.querySelector('#xoaNVform');
+        // dia chi nha hang
+        let name = form.querySelector('input[name="name"]').value;
+        // so dien thoai
+        let phoneNumber = form.querySelector('input[name="phone-number"]').value;
+        // Email
+        let email = form.querySelector('input[name="email"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/information/delete';
+        xhttp.open('DELETE', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ name, phoneNumber, email });
+        xhttp.send(data);
     });
 
+    // Them Mon An
     formADDma.addEventListener('submit', function (event) {
         event.preventDefault();
-        let infor = document.getElementById('maMon').value;
-        outputDiv.innerHTML = 'Thêm Món Ăn (' + infor + ') Thành Công!';
+        console.log('run');
+        // let form = document.querySelector('#addMonAnform');
+        // Ma Mon An
+        // let productid = formADDma.querySelector('#maMon').value;
+        // Ten Mon An
+        let title = formADDma.querySelector('input[name="title"]').value;
+        // Gia Mon An
+        let price = formADDma.querySelector('input[name="price"]').value;
+        // The Loai Mon An (Biến là: tagged)
+        let tag = formADDma.querySelectorAll('input[name="tag"]');
+        let tagged;
+        for (let i = 0; i < tag.length; i++) {
+            if (tag[i].checked) {
+                tagged = tag[i].value;
+                break;
+            }
+        }
+        // Mieu Ta Mon An
+        let description = formADDma.querySelector('input[name="description"]').value;
+        // Anh Mon An
+        let image = formADDma.querySelector('input[name="image"]').value;
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/product/add';
+        xhttp.open('POST', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ title, price, tag: tagged, description });
+        xhttp.send(data);
+
+        setTimeout(function () {
+            closeLogin();
+        }, 1000);
+        outputDiv.innerHTML = 'Đang Thêm Món Ăn ...';
         document.getElementById('output').style.display = 'block';
         setTimeout(function () {
-            window.location.href = 'admin.html';
+            outputDiv.innerHTML = 'Thêm Món Ăn (' + title + ') Thành Công!';
         }, 2000);
+        setTimeout(function () {
+            document.getElementById('output').style.display = 'none';
+        }, 4500);
     });
 
+    // Sua Mon An
     formSUAma.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Sửa Món Ăn Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        // Ma Mon An
+        let productid = formSUAma.querySelector('input[name="id"]').value;
+        // Ten Mon An
+        let title = formSUAma.querySelector('input[name="name"]').value;
+        // Gia Mon An
+        let price = formSUAma.querySelector('input[name="price"]').value;
+        // Mieu Ta Mon An
+        let description = formSUAma.querySelector('input[name="description"]').value;
+        // Anh Mon An
+        let image = formSUAma.querySelector('input[name="image"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/product/update';
+        xhttp.open('PUT', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ productid, title, price });
+        xhttp.send(data);
     });
 
+    // Xoa Mon An
     formXoama.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Xóa Món Ăn Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        // Ma Mon An
+        let productid = formXoama.querySelector('input[name="id"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/product/delete';
+        xhttp.open('DELETE', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ productid });
+        xhttp.send(data);
     });
 
+    // Them Khuyen Mai
     formADDkm.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Thêm Khuyến Mãi Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        // Tên Khuyến Mãi
+        let saleName = formADDkm.querySelector('input[name="name"]').value;
+        // Mô Tả Khuyến Mãi
+        let description = formADDkm.querySelector('input[name="description"]').value;
+        // Thời Gian Bắt Đầu
+        let timeStart = formADDkm.querySelector('input[name="time-start"]').value;
+        // Thời Gian Kết Thúc
+        let timeEnd = formADDkm.querySelector('input[name="time-end"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/sale/add';
+        xhttp.open('POST', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ saleName, description, timeStart, timeEnd });
+        xhttp.send(data);
     });
 
+    // Sua Khuyen Mai
     formSUAkm.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Sửa Khuyến Mãi Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        // Tên Khuyến Mãi
+        let saleName = formSUAkm.querySelector('input[name="name"]').value;
+        // Mô Tả Khuyến Mãi
+        let description = formSUAkm.querySelector('input[name="description"]').value;
+        // Thời Gian Bắt Đầu
+        let timeStart = formSUAkm.querySelector('input[name="time-start"]').value;
+        // Thời Gian Kết Thúc
+        let timeEnd = formSUAkm.querySelector('input[name="time-end"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/sale/update';
+        xhttp.open('PUT', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ saleName, description, timeStart, timeEnd });
+        xhttp.send(data);
     });
 
+    // Xoa Khuyen Mai
     formXoakm.addEventListener('submit', function (event) {
         event.preventDefault();
-        outputDiv.innerHTML = 'Xóa Khuyến Mãi Thành Công!';
-        document.getElementById('output').style.display = 'block';
-        setTimeout(function () {
-            window.location.href = 'admin.html';
-        }, 2000);
+        // Tên Khuyến Mãi
+        let saleName = formXoakm.querySelector('input[name="name"]').value;
+
+        var xhttp = new XMLHttpRequest();
+
+        var url = 'http://127.0.0.1:5000/api/product/delete';
+        xhttp.open('DELETE', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        var data = JSON.stringify({ productid });
+        xhttp.send(data);
     });
 });
