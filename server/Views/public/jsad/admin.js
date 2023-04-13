@@ -11,7 +11,7 @@ if (typeof jQuery === 'undefined') {
  *				It's used for implementing functions and options related
  *				to the template. Keeping everything wrapped in an object
  *				prevents conflict with other plugins and is a better
- *				way to organize our code.
+ *				way to orgaize our code.
  */
 $.AdminLTE = {};
 

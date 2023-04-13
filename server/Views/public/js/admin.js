@@ -178,7 +178,7 @@ $.AdminLTE.layout = {
         var window_height = $(window).height();
         var sidebar_height = $('.sidebar').height();
         //Set the min-height of the content and sidebar based on the
-        //the height of the document.
+        //the height of the document
         if ($('body').hasClass('fixed')) {
             $('.content-wrapper, .right-side').css(
                 'min-height',

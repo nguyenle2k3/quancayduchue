@@ -57,7 +57,7 @@ function closeLogin() {
         element.classList.remove('show');
     });
 }
-
+// event handler
 window.addEventListener('DOMContentLoaded', function () {
     const outputDiv = document.querySelector('#output');
     const formADDnv = document.querySelector('#addNVform');
