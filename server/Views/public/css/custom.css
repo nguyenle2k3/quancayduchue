@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+
+.m-b-20 strong {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+sup {
+    word-spacing: -1px;
+    text-transform: capitalize;
+    color: rgb(0, 255, 242);
+}
+
+.navbar {
+    background: transparent;
+    backdrop-filter: blur(10px);
+}
+
+.bg-light {
+    background-color: rgba(255, 255, 255, 0.473);
+}
+
+.inner-column h1 {
+    font-family: 'Lora', serif;
+}
+
+.inner-column span {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+.heading-title h2 {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+del {
+    color: red;
+    font-size: 70%;
+}
+
+/* menu-filter */
+
+.isotope,
+.isotope .isotope-item {
+    -webkit-transition-duration: 0.8s;
+    -moz-transition-duration: 0.8s;
+    transition-duration: 0.8s;
+}
+
+.isotope {
+    -webkit-transition-property: height, width;
+    -moz-transition-property: height, width;
+    transition-property: height, width;
+}
+
+.isotope .isotope-item {
+    -webkit-transition-property: -webkit-transform, opacity;
+    -moz-transition-property: -moz-transform, opacity;
+    transition-property: transform, opacity;
+}
+
+.filter-button-group button {
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    background: #d65106;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 0px;
+}
+
+.gallery-single {
+    margin: 30px 15px;
+}
+
+.gallery-single {
+    position: relative;
+    overflow: hidden;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px #ccc;
+}
+
+.gallery-list .img-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    background: rgba(51, 51, 51, 0.8);
+    color: #35424c;
+    opacity: 0;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    z-index: 2;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+}
+
+.gallery-list .gallery-single:hover .img-overlay {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+}
+
+.gallery-list .gallery-single:hover .img-overlay .hoverbutton {
+    opacity: 1;
+    top: 50%;
+}
+
+.img-overlay h3 {
+    font-size: 20px;
+    color: #ffffff;
+    position: absolute;
+    top: 80%;
+    left: 0;
+    opacity: 0;
+    right: 0;
+    text-align: center;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+.gallery-list .gallery-single:hover .img-overlay h3 {
+    opacity: 1;
+    top: 30%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .filter-button-group button {
+        padding: 12px 27px;
+    }
+    .filter-button-group {
+        text-align: center !important;
+    }
+}
+@media (max-width: 767px) {
+    .filter-button-group button {
+        padding: 12px 27px;
+        margin: 5px;
+    }
+    .filter-button-group {
+        text-align: center !important;
+    }
+    #gallery {
+        display: none;
+    }
+}
+@media only screen and (min-width: 280px) and (max-width: 599px) {
+    .filter-button-group button {
+        padding: 10px 17px;
+    }
+    .filter-button-group {
+        text-align: center !important;
+    }
+}
+
+.filter-button-group .active {
+    color: rgb(51, 255, 0);
+}
+
+#gallery {
+    padding-top: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.container-fluid .section-title h1 {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 28px;
+    font-weight: 500;
+}
+.container-fluid .section-title p {
+    font-size: 18px;
+    font-weight: 200;
+}
+
+.hvr-radial-in:hover {
+    border-radius: 5px;
+    box-shadow: 0 0 5px #ff0b85, 0 0 25px #ff0fc3, 0 0 50px #f4e403, 0 0 100px #d5cf1e;
+}
+
+.hvr-radial-in {
+    transition-duration: 0.2s;
+    transition-delay: 0.1s;
+}
+
+.box-split-center {
+    display: flex;
+}
+.box-split-center div {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    text-align: center;
+}

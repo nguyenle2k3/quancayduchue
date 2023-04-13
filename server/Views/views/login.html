@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Site Metas -->
+    <title>ADMIN</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="HotPot, Grilled" />
+    <meta name="author" content="AZAOWEN, NguyenLe" />
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="/img/logo_DH.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/custom.css" />
+    <link rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="/css/loader.css" />
+</head>
+
+<header class="top-navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/img/logo_DH.png" alt="Logo Đức Huệ " />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-rs-food"
+                aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbars-rs-food">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/client/home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/client/hots">Hots</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/client/aboutus">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/client/menu">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/client/contact">Contacts</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="/client/login">Đăng nhập</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<body id="bgbgall">
+    <div id="login-box" class="login-box">
+        <h4>
+            Đăng Nhập
+            <p id="extras"></p>
+        </h4>
+        <form id="login-form" method="POST">
+            <div class="user-box">
+                <input type="text" name="email" required />
+                <label>EMAIL</label>
+            </div>
+
+            <div class="user-box">
+                <input type="password" name="password" required />
+                <label>Mật Khẩu</label>
+            </div>
+            <button type="submit" name="btn">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Đăng Nhập
+            </button>
+        </form>
+    </div>
+
+    <div id="output"></div>
+
+
+
+    <div id="preloader">
+        <div class="loader">
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="../../Controllers/controller/login.js"></script>
+    <script>
+        $(window).on('load', function () {
+            $("#preloader").fadeOut();
+        });
+    </script>
+</body>
+
+</html>
