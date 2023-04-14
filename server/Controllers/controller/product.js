@@ -53,6 +53,7 @@ const updateProduct = asyncHandler(async (req, res) => {
         updatedProduct: response ? response : 'Somethings went wrong... ',
     });
 });
+
 const deleteProduct = asyncHandler(async (req, res) => {
     const { productid } = req.body;
     const product = await Product.findOne({ productid: productid });

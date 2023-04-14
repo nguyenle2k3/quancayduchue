@@ -2668,7 +2668,7 @@ textarea.form-control {
 /* input[type='search'] { */
 /* -webkit-appearance: none; */
 /* } */
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
+@media screen {
     input[type='date'],
     input[type='time'],
     input[type='datetime-local'],

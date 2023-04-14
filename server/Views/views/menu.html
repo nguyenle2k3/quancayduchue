@@ -576,7 +576,11 @@
 
     <script>
         // ../../Models/config/dataJSON.js
-        fetch('data.json')
+        // var data = JSON.stringify(fetch('./data.json'));
+        // data = JSON.parse(data);
+        console.log(fetch('./data.json'))
+        fetch('./data.json')
+
             .then((response) => response.json())
             .then((data) => {
                 console.log(data); // Dữ liệu JSON đã được đọc
