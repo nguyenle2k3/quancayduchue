@@ -15,9 +15,6 @@ var promotionSchema = new mongoose.Schema(
             required: true,
             lowercase: true,
         },
-        slug: {
-            type: String,
-        },
         startTime: {
             type: Date,
             required: true,

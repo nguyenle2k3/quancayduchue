@@ -4,7 +4,8 @@ const { verifyAccessToken } = require('../middleware/verifyToken');
 
 verifyAccessToken;
 router.post('/add', ctrls.addProduct);
-router.put('/update', ctrls.updateProduct);
-router.delete('/delete', ctrls.deleteProduct);
+router.post('/update', ctrls.updateProduct);
+router.post('/delete', ctrls.deleteProduct);
+router.get('/', ctrls.getAllProduct);
 
 module.exports = router;

@@ -94,7 +94,8 @@
                 <div class="tabs-panel is-active">
                     <div class="menu-content">
                         <div class="menu-section">
-                            <table id="menu1">
+
+                            <table id="grilled-c1">
                                 <tr>
                                     <td><span>Thập Cẩm Nướng</span></td>
                                     <td><span>99k</span></td>
@@ -176,7 +177,7 @@
                         </div>
                         <!--.menu-section-->
                         <div class="menu-section">
-                            <table>
+                            <table id="grilled-c2">
                                 <tr>
                                     <td><span>Tôm Nướng Sa Tế</span></td>
                                     <td><span>15k</span></td>
@@ -265,7 +266,8 @@
                 <div class="tabs-panel">
                     <div class="menu-content">
                         <div class="menu-section">
-                            <table>
+
+                            <table id="hotpot-c1">
                                 <tr>
                                     <td><span>Ếch om </span></td>
                                     <td><span>150k</span></td>
@@ -333,7 +335,7 @@
                         </div>
                         <!--.menu-section-->
                         <div class="menu-section">
-                            <table>
+                            <table id="hotpot-c2">
                                 <tr>
                                     <td><span>bò lẩu </span></td>
                                     <td><span>80k</span></td>
@@ -408,7 +410,7 @@
                 <div class="tabs-panel">
                     <div class="menu-content">
                         <div class="menu-section">
-                            <table>
+                            <table id="combo-c1">
 
                                 <tr>
                                     <td><span>Combo lẩu (2 người)</span></td>
@@ -453,7 +455,7 @@
                         </div>
                         <!--.menu-section-->
                         <div class="menu-section">
-                            <table>
+                            <table id="combo-c2">
                                 <tr>
                                     <td><span>Combo nướng (2 người)</span></td>
                                     <td><span>199K</span></td>
@@ -497,7 +499,7 @@
                 <div class="tabs-panel">
                     <div class="menu-content">
                         <div class="menu-section">
-                            <table>
+                            <table id="other-c1">
                                 <tr>
                                     <td><span>Rượu chuối, táo mèo</span></td>
                                     <td><span>20k</span></td>
@@ -530,7 +532,7 @@
                         </div>
                         <!--.menu-section-->
                         <div class="menu-section">
-                            <table>
+                            <table id="other-c2">
                                 <tr>
                                     <td><span>Nước Lọc</span></td>
                                     <td><span>5k</span></td>
@@ -572,64 +574,6 @@
         <!--.container-->
     </section>
     <!-- Detail menu end -->
-
-
-    <script>
-        // ../../Models/config/dataJSON.js
-        // var data = JSON.stringify(fetch('./data.json'));
-        // data = JSON.parse(data);
-        console.log(fetch('./data.json'))
-        fetch('./data.json')
-
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data); // Dữ liệu JSON đã được đọc
-                console.log(typeof data);
-                // Lấy phần tử HTML dựa trên id
-                // const menu1 = document.getElementById('menu1');
-
-                // Lặp qua từng đối tượng trong dữ liệu JSON
-                data.forEach((food) => {
-                    // Tạo mới các phần tử HTML
-                    const tr = document.createElement('tr');
-
-                    const td1 = document.createElement('td');
-                    const td2 = document.createElement('td');
-                    // const td3 = document.createElement('td');
-
-                    const span1 = document.createElement('span');
-                    const span2 = document.createElement('span');
-                    // const span3 = document.createElement('span');
-
-                    // Thiết lập nội dung của các phần tử span từ dữ liệu JSON
-                    span1.textContent = food.title;
-                    span2.textContent = food.price;
-                    // span3.textContent = food.city;
-
-                    // Chèn các phần tử span vào trong các phần tử td
-                    td1.appendChild(span1);
-                    td2.appendChild(span2);
-                    // td3.appendChild(span3);
-
-                    // Chèn các phần tử td vào trong phần tử tr
-                    tr.appendChild(td1);
-                    tr.appendChild(td2);
-                    // tr.appendChild(td3);
-
-                    // Lấy phần tử table từ DOM dựa trên id
-                    const table = document.getElementById('menu1');
-
-                    // Chèn phần tử tr vào trong phần tử table
-                    table.appendChild(tr);
-                });
-            })
-            .catch((error) => console.error('Lỗi đọc file JSON: ', error));
-    </script>
-
-
-
-
-
 
     <!-- Start QT -->
     <div class="qt-box qt-background qt-background3">
@@ -847,11 +791,14 @@
     <script src="/js/contact-form-script.js"></script>
     <script src="/js/custom.js"></script>
     <!-- <script src="../../Models/config/dataJSON.js"></script> -->
+    <script src="/js/dataJSON.js"></script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.js"></script>
     <!-- <script src="js/menu-detail.js"></script> -->
+
+
     <script>
         $(window).on('load', function () {
             $("#preloader").fadeOut();

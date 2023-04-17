@@ -1,23 +1,34 @@
-fetch('../models/data.json')
+fetch('/client/json')
     .then((response) => response.json())
     .then((data) => {
-        console.log(data); // Dữ liệu JSON đã được đọc
+        const grilled1 = document.getElementById('grilled-c1'); // Menu nuong left collum
+        const grilled2 = document.getElementById('grilled-c2'); // Menu nuong right collum
 
-        // Lấy phần tử HTML dựa trên id
-        // const menu1 = document.getElementById('menu1');
+        const hotpot1 = document.getElementById('hotpot-c1'); // Menu lau left collum
+        const hotpot2 = document.getElementById('hotpot-c2'); // Menu lau right collum
 
-        // Lặp qua từng đối tượng trong dữ liệu JSON
+        const combo1 = document.getElementById('combo-c1'); // Menu combo left collum
+        const combo2 = document.getElementById('combo-c2'); // Menu combo right collum
+
+        const other1 = document.getElementById('other-c1'); // Menu khac left collum
+        const other2 = document.getElementById('other-c2'); // Menu khac right collum
+
+        let count1 = 0; // Nuong
+        let count2 = 0; // lau
+        let count3 = 0; // combo
+        let count4 = 0; // khac
+
         data.forEach((food) => {
-            // Tạo mới các phần tử HTML
             const tr = document.createElement('tr');
+            const trTR = document.createElement('tr'); //*
 
             const td1 = document.createElement('td');
             const td2 = document.createElement('td');
-            // const td3 = document.createElement('td');
+            const tdTD = document.createElement('td'); // *
 
             const span1 = document.createElement('span');
             const span2 = document.createElement('span');
-            // const span3 = document.createElement('span');
+            // const spanTR = document.createElement('span');
 
             // Thiết lập nội dung của các phần tử span từ dữ liệu JSON
             span1.textContent = food.title;
@@ -33,14 +44,47 @@ fetch('../models/data.json')
             tr.appendChild(td1);
             tr.appendChild(td2);
             // tr.appendChild(td3);
+            trTR.appendChild(tdTD);
 
-            // Lấy phần tử table từ DOM dựa trên id
-            const table = document.getElementById('menu1');
+            switch (food.tag) {
+                case 'Nướng':
+                    if (count1 % 2 === 0) {
+                        grilled1.appendChild(tr);
+                    } else {
+                        grilled2.appendChild(tr);
+                    }
+                    count1++;
+                    break;
 
-            // Chèn phần tử tr vào trong phần tử table
-            table.appendChild(tr);
+                case 'Lẩu':
+                    if (count2 % 2 === 0) {
+                        hotpot1.appendChild(tr);
+                    } else {
+                        hotpot2.appendChild(tr);
+                    }
+                    count2++;
+                    break;
+
+                case 'COMBO':
+                    if (count3 % 2 === 0) {
+                        combo1.appendChild(tr);
+                    } else {
+                        combo2.appendChild(tr);
+                    }
+                    count3++;
+                    break;
+
+                default:
+                    if (count4 % 2 === 0) {
+                        other1.appendChild(tr);
+                    } else {
+                        other2.appendChild(tr);
+                    }
+                    count4++;
+                    break;
+            }
         });
     })
     .catch((error) => console.error('Lỗi đọc file JSON: ', error));
 
-// document.getElementById('jajaja').innerHTML = 'husaifuiads isanfus ';
+//  mongoexport --db=quancayduchue --collection=products --out=D:\MegaSync\MegaSync\NotePad\ICTU_\BTL\CNPM\DH\duchueproject\server\Models/data.json

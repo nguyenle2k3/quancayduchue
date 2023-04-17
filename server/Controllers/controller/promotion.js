@@ -1,9 +1,8 @@
 const Promotion = require('../../Models/models/promotion');
 const asyncHandler = require('express-async-handler');
-const slugify = require('slugify');
+const create_id = require('../../utils/create_id');
 
 const createPromotion = asyncHandler(async (req, res) => {
-    console.log(req.body);
     const { title, description } = req.body;
     var startTime = new Date(req.body.startTime);
     var endTime = new Date(req.body.endTime);
@@ -14,8 +13,9 @@ const createPromotion = asyncHandler(async (req, res) => {
             mes: 'Missing inputs',
         });
     }
-    req.body.slug = slugify(req.body.title, { replacement: '', lower: true });
-    req.body.promotionid = req.body.slug;
+    // req.body.slug = slugify(req.body.title, { replacement: '', lower: true });
+    req.body.promotionid = create_id.string_to_slug(req.body.title);
+    // req.body.promotionid = req.body.slug;
     const newPromotion = await Promotion.create(req.body);
     return res.status(200).json({
         success: newPromotion ? true : false,
@@ -25,6 +25,15 @@ const createPromotion = asyncHandler(async (req, res) => {
 
 const updatePromotion = asyncHandler(async (req, res) => {
     const { promotionid } = req.body;
+    // Check input
+    const slug = create_id.string_to_slug(promotionid);
+    if (slug !== promotionid) {
+        return res.status(404).json({
+            success: false,
+            mes: 'Promotionid invalid !',
+        });
+    }
+    // Find in database
     const promotion = await Promotion.findOne({ promotionid: promotionid });
     if (promotion === null) {
         return res.status(404).json({
@@ -32,6 +41,11 @@ const updatePromotion = asyncHandler(async (req, res) => {
             mes: 'Product not found !',
         });
     }
+    if (req.body.title === '') req.body.title = promotion.title;
+    if (req.body.description === '') req.body.description = promotion.description;
+    if (req.body.startTime === '') req.body.startTime = promotion.startTime;
+    if (req.body.endTime === '') req.body.endTime = promotion.endTime;
+    req.body.promotionid = create_id.string_to_slug(req.body.title);
     const response = await Promotion.findByIdAndUpdate(promotion._id, req.body, { new: true });
     return res.status(200).json({
         success: response ? true : false,
@@ -41,6 +55,14 @@ const updatePromotion = asyncHandler(async (req, res) => {
 
 const deletedPromotion = asyncHandler(async (req, res) => {
     const { promotionid } = req.body;
+    // Check input
+    const slug = create_id.string_to_slug(promotionid);
+    if (slug !== promotionid) {
+        return res.status(404).json({
+            success: false,
+            mes: 'Promotionid invalid !',
+        });
+    }
     const promotion = await Promotion.findOne({ promotionid: promotionid });
     if (promotion === null) {
         return res.status(404).json({

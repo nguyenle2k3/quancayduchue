@@ -1,4 +1,6 @@
 const mongoose = require('mongoose'); // Erase if already required
+
+const fs = require('fs');
 // const bcrypt = require('bcrypt');
 // const crypto = require('crypto');
 
@@ -10,7 +12,6 @@ var productSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            lowercase: true,
         },
         // Tên món ăn
         title: {
@@ -22,28 +23,21 @@ var productSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        slug: {
-            type: String,
-        },
         // giá
         price: {
-            type: Number,
+            type: String,
             required: true,
         },
         // mô tả
         description: {
             type: String,
         },
-        // hình ảnh
-        image: {
-            type: Buffer,
-            contentType: String,
-        },
     },
     {
         timestamps: true,
     }
 );
-
 //Export the model
-module.exports = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);
+
+module.exports = Product;

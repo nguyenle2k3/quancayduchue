@@ -1,6 +1,6 @@
 const Product = require('../../Models/models/product');
 const asyncHandler = require('express-async-handler');
-const slugify = require('slugify');
+const create_id = require('../../utils/create_id');
 
 const addProduct = asyncHandler(async (req, res) => {
     const { title, price, tag } = req.body;
@@ -11,13 +11,15 @@ const addProduct = asyncHandler(async (req, res) => {
         });
     }
     if (req.body && req.body.title) {
-        req.body.slug = slugify(req.body.title, { replacement: '', lower: true });
-        req.body.productid = req.body.slug;
+        req.body.productid = create_id.string_to_slug(req.body.title);
     }
     // if  product existed
     const product = await Product.findOne({ productid: req.body.productid });
     if (product) {
-        throw new Error('Product has existed ! ');
+        return res.status(200).json({
+            success: false,
+            mes: 'Product existed!',
+        });
     } else {
         const newProduct = await Product.create(req.body);
         return res.status(200).json({
@@ -27,19 +29,18 @@ const addProduct = asyncHandler(async (req, res) => {
     }
 });
 
-// const updateProduct = asyncHandler(async (req, res) => {
-//     const { pid } = req.body;
-//     if (Object.keys(req.body).length === 0) throw new Error('Missing inputs !');
-//     const response = await Product.findByIdAndUpdate(pid, req.body, { new: true });
-//     return res.status(200).json({
-//         success: response ? true : false,
-//         updatedProduct: response ? response : 'Somethings went wrong... ',
-//     });
-// });
-
 const updateProduct = asyncHandler(async (req, res) => {
     if (Object.keys(req.body).length === 0) throw new Error('Missing inputs !');
     const { productid } = req.body;
+    // Check input
+    const slug = create_id.string_to_slug(productid);
+    if (slug !== productid) {
+        return res.status(404).json({
+            success: false,
+            mes: 'Productid invalid !',
+        });
+    }
+    // Find in database
     const product = await Product.findOne({ productid: productid });
     if (product === null) {
         return res.status(404).json({
@@ -47,6 +48,11 @@ const updateProduct = asyncHandler(async (req, res) => {
             mes: 'Product not found !',
         });
     }
+    if (req.body.title === '') req.body.title = product.title;
+    if (req.body.tag === '') req.body.tag = product.tag;
+    if (req.body.price === '') req.body.price = product.title;
+    if (req.body.description === '') req.body.description = product.description;
+    if (req.body.image === '') req.body.image = product.image;
     const response = await Product.findByIdAndUpdate(product._id, req.body, { new: true });
     return res.status(200).json({
         success: response ? true : false,
@@ -56,6 +62,14 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 const deleteProduct = asyncHandler(async (req, res) => {
     const { productid } = req.body;
+    // Check input
+    const slug = create_id.string_to_slug(productid);
+    if (slug !== productid) {
+        return res.status(404).json({
+            success: false,
+            mes: 'Productid invalid !',
+        });
+    }
     const product = await Product.findOne({ productid: productid });
     if (product === null) {
         return res.status(404).json({
@@ -70,8 +84,18 @@ const deleteProduct = asyncHandler(async (req, res) => {
     });
 });
 
+const getAllProduct = asyncHandler(async (req, res) => {
+    const products = await Product.find({}).select('-_id -createAt -updateAt');
+    res.status(200).json({
+        success: true,
+        products,
+    });
+    return;
+});
+
 module.exports = {
     addProduct,
     updateProduct,
     deleteProduct,
+    getAllProduct,
 };

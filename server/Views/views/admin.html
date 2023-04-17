@@ -25,7 +25,7 @@
 
         <header class="main-header">
             <!-- Logo -->
-            <a href="./admin" class="logo">
+            <a href="" class="logo">
                 <div class="pull-left image">
                     <img src="/img/logo_DH.png" class="img-circle" alt="User Image" />
                 </div>
@@ -37,7 +37,6 @@
                     <span class="sr-only">.</span>
                 </a>
 
-
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav" style="cursor: pointer;">
 
@@ -46,17 +45,13 @@
                                 <img src="/img/logo_DH.png" class="user-image" alt="Admin Image" />
                                 <span class="hidden-xs logout">ĐĂNG XUẤT</span>
                             </a>
-
                         </li>
-
-
                     </ul>
                 </div>
             </nav>
         </header>
 
         <script>
-
             const logOutBtn = document.getElementById('logoutBT');
             logOutBtn.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -80,36 +75,18 @@
 
                 xhttp.send();
             });
-
         </script>
-
-
-
-
 
         <aside class="main-sidebar">
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
-
                     <div class="pull-left info">
                         <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Admin</p>
-
                     </div>
                 </div>
                 <hr>
-                <!-- search form -->
-                <!-- <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-              <input type="text" name="q" class="form-control " placeholder="Tìm Kiếm"/>
-              <span class="input-group-btn">
-                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-          </form> -->
-                <!-- /.search form -->
-                <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
                     <li class="header active">Danh Mục Chính</li>
 
@@ -164,21 +141,8 @@
                 <h1>Quản Trị Viên -
                     <small>Control</small>
                 </h1>
-
-
-
-
             </section>
-
-
-
-
-
-
-
         </div><!-- /.content-wrapper -->
-
-
 
         <footer class="main-footer">
             2023 &copy; developed by AZAOWEN, NguyenLe
@@ -189,15 +153,21 @@
     <div id="AddNhanVien" class="AddNhanVien">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Thêm Thông Tin</h4>
-        <form id="addNVform">
+        <form id="addTTform"> <!-- addNVform -->
+
 
             <div class="user-box">
-                <input type="text" name="name" required>
+                <input type="text" name="title" required>
+                <label>Tên Cơ Sở <sup style="color: red; font-size: 100%;">*</sup></label>
+            </div>
+
+            <div class="user-box">
+                <input type="text" name="address" required>
                 <label>Địa Chỉ Nhà Hàng <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
             <div class="user-box">
-                <input type="tel" name="phone-number" required>
+                <input type="tel" name="phoneNumber" required>
                 <label>Số Điện Thoại <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
             <div class="user-box">
@@ -205,7 +175,7 @@
                 <label>Email <sup style="color: red; font-size: 100%;">*</sup> </label>
             </div>
 
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormAddContact(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -213,7 +183,58 @@
                 Thêm
             </button>
         </form>
+        <script>
+            function submitFormAddContact(event) {
+                event.preventDefault(); // Chặn sự kiện submit form mặc định
+                const xhr = new XMLHttpRequest();
+                const form = document.getElementById("addTTform");
+                const outputDiv = document.querySelector('#output');
+                xhr.open("POST", "http://127.0.0.1:5000/api/contact/add");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (this.status === 200) {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
 
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Thêm Thông Tin Thành Công!';
+                            outputDiv.style.background = 'green';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+
+                    } else {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Thông Tin Không Hợp Lệ!';
+                            outputDiv.style.background = '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+                    }
+                };
+
+                const formData = new FormData(form);
+                const payload = {
+                    title: formData.get("title"),
+                    address: formData.get("address"),
+                    phone: formData.get("phoneNumber"),
+                    email: formData.get("email")
+                };
+
+                xhr.send(JSON.stringify(payload));
+            }
+        </script>
     </div>
     <!-- Add thong tin End -->
 
@@ -223,10 +244,15 @@
     <div id="SuaNhanVien" class="SuaNhanVien">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Sửa Thông Tin</h4>
-        <form id="suaNVform">
+        <form id="suaTTform"> <!-- suaNVform -->
 
             <div class="user-box">
-                <input type="text" name="name" required>
+                <input type="text" name="title" required>
+                <label>Tên Cơ Sở <sup style="color: red; font-size: 100%;">*</sup></label>
+            </div>
+
+            <div class="user-box">
+                <input type="text" name="address" required>
                 <label>Địa Chỉ Nhà Hàng <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
@@ -239,7 +265,7 @@
                 <label>Email <sup style="color: red; font-size: 100%;">*</sup> </label>
             </div>
 
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormUpdateContact(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -248,6 +274,58 @@
             </button>
         </form>
 
+        <script>
+            function submitFormUpdateContact(event) {
+                event.preventDefault(); // Chặn sự kiện submit form mặc định
+                const xhr = new XMLHttpRequest();
+                const form = document.getElementById("suaTTform");
+                const outputDiv = document.querySelector('#output');
+                xhr.open("POST", "http://127.0.0.1:5000/api/contact/update");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (this.status === 200) {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Sửa Thông Tin Thành Công!';
+                            outputDiv.style.background = 'green';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+
+                    } else {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Thông Tin Không Hợp Lệ!';
+                            outputDiv.style.background = '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+                    }
+                };
+
+                const formData = new FormData(form);
+                const payload = {
+                    title: formData.get("title"),
+                    address: formData.get("address"),
+                    phone: formData.get("phoneNumber"),
+                    email: formData.get("email")
+                };
+
+                xhr.send(JSON.stringify(payload));
+            }
+        </script>
     </div>
     <!-- Sua thong tin End-->
 
@@ -256,22 +334,14 @@
     <div id="XoaNhanVien" class="XoaNhanVien">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Xóa Thông Tin</h4>
-        <form id="xoaNVform">
-            <div class="user-box">
-                <input type="text" name="name" required>
-                <label>Địa Chỉ Nhà Hàng <sup style="color: red; font-size: 100%;">*</sup></label>
-            </div>
+        <form id="xoaTTform"> <!-- xoaNVform -->
 
             <div class="user-box">
-                <input type="tel" name="phone-number" required>
-                <label>Số Điện Thoại <sup style="color: red; font-size: 100%;">*</sup></label>
-            </div>
-            <div class="user-box">
-                <input type="email" name="email" required>
-                <label>Email <sup style="color: red; font-size: 100%;">*</sup> </label>
+                <input type="text" name="title" required>
+                <label>Tên Cơ Sở <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormDeleteContact(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -280,6 +350,55 @@
             </button>
         </form>
 
+        <script>
+            function submitFormDeleteContact(event) {
+                event.preventDefault(); // Chặn sự kiện submit form mặc định
+                const xhr = new XMLHttpRequest();
+                const form = document.getElementById("xoaTTform");
+                const outputDiv = document.querySelector('#output');
+                xhr.open("POST", "http://127.0.0.1:5000/api/contact/delete");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (this.status === 200) {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Xóa Thông Tin Thành Công!';
+                            outputDiv.style.background = 'green';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+
+                    } else {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Không Tìm Thấy Cơ Sở Cần Xóa';
+                            outputDiv.style.background = '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+                    }
+                };
+
+                const formData = new FormData(form);
+                const payload = {
+                    title: formData.get("title"),
+                };
+
+                xhr.send(JSON.stringify(payload));
+            }
+        </script>
     </div>
     <!-- xoa thong tin End  -->
 
@@ -288,14 +407,7 @@
     <div id="AddMonAn" class="AddMonAn">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Thêm Món Ăn</h4>
-        <form id="addMonAnform" action='http://127.0.0.1:5000/api/product/add' method="POST">
-
-
-            <!-- <div class="user-box">
-                <input type="text" name="productid" id="maMon" required>
-                <label> Mã Món Ăn <sup style="color: red; font-size: 100%;">*</sup></label>
-            </div> -->
-
+        <form id="addMonAnform">
             <div class="user-box">
                 <input type="text" name="title" required>
                 <label>Tên Món <sup style="color: red; font-size: 100%;">*</sup></label>
@@ -306,8 +418,6 @@
                 <label>Giá Món Ăn <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
-
-            <!-- <div class="user-box"> -->
             <label id="ppp">Thể loại món: <sup style="color: red; font-size: 100%;">*</sup></label>
             <div id="split">
                 <div class="columneee">
@@ -328,22 +438,13 @@
                 </div>
 
             </div>
-            <!-- </div> -->
-
 
             <div class="user-box">
                 <input type="text" name="description">
                 <label> Miêu Tả Món Ăn </label>
             </div>
 
-            <div class="user-box">
-                <input type="file" name="image" accept="image/*">
-                <label> Ảnh Món Ăn </label>
-            </div>
-
-
-
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormAddProduct(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -351,9 +452,64 @@
                 Thêm
             </button>
         </form>
+        <script>
 
+            function submitFormAddProduct(event) {
+                event.preventDefault(); // Chặn sự kiện submit form mặc định
+                const xhr = new XMLHttpRequest();
+                const form = document.getElementById("addMonAnform");
+                const outputDiv = document.querySelector('#output');
+                xhr.open("POST", "http://127.0.0.1:5000/api/product/add");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        if (this.status === 200) {
+                            setTimeout(function () {
+                                closeLogin();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                outputDiv.innerHTML = 'Thêm Món Ăn Thành Công!';
+                                outputDiv.style.background = 'green';
+                                outputDiv.style.color = 'white';
+                                outputDiv.style.display = 'block';
+                            }, 1000);
+                            setTimeout(function () {
+                                document.getElementById('output').style.display = 'none';
+                            }, 4500);
+
+                        } else {
+                            setTimeout(function () {
+                                closeLogin();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                outputDiv.innerHTML = 'Món Ăn Đã Tồn Tại !';
+                                outputDiv.style.background = '#de1f18';
+                                outputDiv.style.color = 'white';
+                                outputDiv.style.display = 'block';
+                            }, 1000);
+                            setTimeout(function () {
+                                document.getElementById('output').style.display = 'none';
+                            }, 4500);
+                        }
+                    }
+                };
+
+                const formData = new FormData(form);
+                const payload = {
+                    productid: formData.get('productid'),
+                    title: formData.get('title'),
+                    price: formData.get("price"),
+                    tag: formData.get("tag"),
+                    description: formData.get("description"),
+                };
+
+                xhr.send(JSON.stringify(payload));
+            }
+        </script>
     </div>
-    <!-- Add Nhan Vien End -->
+    <!-- Add Mon An End -->
 
 
 
@@ -361,16 +517,16 @@
     <div id="SuaMonAn" class="SuaMonAn">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Sửa Món Ăn</h4>
-        <form id="suaMonAnform" method="PUT">
+        <form id="suaMonAnform" action='http://127.0.0.1:5000/api/product/update' method="POST">
 
 
             <div class="user-box">
-                <input type="text" name="id" required>
+                <input type="text" name="productid" required>
                 <label> Mã Món Ăn <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
             <div class="user-box">
-                <input type="text" name="name">
+                <input type="text" name="title">
                 <label>Tên Món </label>
             </div>
 
@@ -379,19 +535,33 @@
                 <label>Giá Món Ăn </label>
             </div>
 
+            <label id="ppp">Thể loại món: </label>
+            <div id="split">
+                <div class="columneee">
+                    <input type="radio" name="tag" value="Đồ Lẩu" checked />
+                    <p id="ppp"> Đồ Lẩu </p>
+                </div>
+                <div class="columneee">
+                    <input type="radio" name="tag" value="Đồ Nướng" />
+                    <p id="ppp">Đồ Nướng </p>
+                </div>
+                <div class="columneee">
+                    <input type="radio" name="tag" value="COMBO" />
+                    <p id="ppp">COMBO</p>
+                </div>
+                <div class="columneee">
+                    <input type="radio" name="tag" value="Khác" />
+                    <p id="ppp">Khác</p>
+                </div>
+
+            </div>
+
             <div class="user-box">
                 <input type="text" name="description">
                 <label> Miêu Tả Món Ăn </label>
             </div>
 
-            <div class="user-box">
-                <input type="file" name="image" accept="image/*">
-                <label> Ảnh Món Ăn </label>
-            </div>
-
-
-
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormUpdateProduct(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -399,6 +569,63 @@
                 Sửa
             </button>
         </form>
+
+        <script>
+
+            function submitFormUpdateProduct(event) {
+                event.preventDefault(); // Chặn sự kiện submit form mặc định
+                const xhr = new XMLHttpRequest();
+                const form = document.getElementById("suaMonAnform");
+                const outputDiv = document.querySelector('#output');
+                xhr.open("POST", "http://127.0.0.1:5000/api/product/update");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        if (this.status === 200) {
+                            setTimeout(function () {
+                                closeLogin();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                outputDiv.innerHTML = 'Sửa Món Ăn Thành Công!';
+                                outputDiv.style.background = 'green';
+                                outputDiv.style.color = 'white';
+                                outputDiv.style.display = 'block';
+                            }, 1000);
+                            setTimeout(function () {
+                                document.getElementById('output').style.display = 'none';
+                            }, 4500);
+
+                        } else {
+                            setTimeout(function () {
+                                closeLogin();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                outputDiv.innerHTML = 'Mã Món Ăn Không Hợp Lệ!';
+                                outputDiv.style.background = '#de1f18';
+                                outputDiv.style.color = 'white';
+                                outputDiv.style.display = 'block';
+                            }, 1000);
+                            setTimeout(function () {
+                                document.getElementById('output').style.display = 'none';
+                            }, 4500);
+                        }
+                    }
+                };
+
+                const formData = new FormData(form);
+                const payload = {
+                    productid: formData.get('productid'),
+                    title: formData.get('title'),
+                    price: formData.get("price"),
+                    tag: formData.get("tag"),
+                    description: formData.get("description"),
+                };
+
+                xhr.send(JSON.stringify(payload));
+            }
+        </script>
 
     </div>
     <!-- Sua Nhan Vien End -->
@@ -412,11 +639,11 @@
 
 
             <div class="user-box">
-                <input type="text" name="id" required>
+                <input type="text" name="productid" required>
                 <label> Mã Món Ăn <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormDeleteProduct(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -425,6 +652,58 @@
             </button>
         </form>
 
+        <script>
+            function submitFormDeleteProduct(event) {
+                event.preventDefault(); // Chặn sự kiện submit form mặc định
+                const xhr = new XMLHttpRequest();
+                const form = document.getElementById("suaMonAnform");
+                const outputDiv = document.querySelector('#output');
+                xhr.open("POST", "http://127.0.0.1:5000/api/product/delete");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        if (this.status === 200) {
+                            setTimeout(function () {
+                                closeLogin();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                outputDiv.innerHTML = 'Xoá Món Ăn Thành Công!';
+                                outputDiv.style.background = 'green';
+                                outputDiv.style.color = 'white';
+                                outputDiv.style.display = 'block';
+                            }, 1000);
+                            setTimeout(function () {
+                                document.getElementById('output').style.display = 'none';
+                            }, 4500);
+
+                        } else {
+                            setTimeout(function () {
+                                closeLogin();
+                            }, 1000);
+
+                            setTimeout(function () {
+                                outputDiv.innerHTML = 'Mã Món Ăn Không Hợp Lệ!';
+                                outputDiv.style.background = '#de1f18';
+                                outputDiv.style.color = 'white';
+                                outputDiv.style.display = 'block';
+                            }, 1000);
+                            setTimeout(function () {
+                                document.getElementById('output').style.display = 'none';
+                            }, 4500);
+                        }
+                    }
+                };
+
+                const formData = new FormData(form);
+                const payload = {
+                    productid: formData.get('productid'),
+                };
+
+                xhr.send(JSON.stringify(payload));
+            }
+        </script>
+
     </div>
     <!-- Sua Nhan Vien End -->
 
@@ -432,7 +711,7 @@
     <div id="AddKhuyenMai" class="AddKhuyenMai">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Thêm Khuyến Mãi</h4>
-        <!-- <form id="addKhuyenMaiform">
+        <form id="addKhuyenMaiform">
 
 
             <div class="user-box">
@@ -447,66 +726,77 @@
             </div>
 
             <div class="user-box">
-                <input type="date" name="startTime" required>
+                <input type="date" name="startTime" class="custom-date" value="2023-05-30">
                 <label> Thời Gian Bắt Đầu <sup style="color: red; font-size: 100%;">*</sup> </label>
             </div>
 
             <div class="user-box">
-                <input type="date" name="endTime" required>
+                <input type="date" name="endTime" class="custom-date" value="2023-06-02">
                 <label> Thời Gian Kết Thúc <sup style="color: red; font-size: 100%;">*</sup> </label>
-            </div> -->
-        <!-- <div class="user-box">
-            <input type="date" name="startTime" class="custom-date" required value="2023-03-23">
-            <label> Thời Gian Bắt Đầu <sup style="color: red; font-size: 100%;">*</sup> </label>
-        </div>
+            </div>
 
-        <div class="user-box">
-            <input type="date" class="custom-date" name="endTime" required value="2023-03-24">
-            <label> Thời Gian Kết Thúc <sup style="color: red; font-size: 100%;">*</sup> </label>
-        </div>
-
-        <button type="submit" id="submitBtn">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            Thêm
-        </button>
-        </form> -->
-        <form id="formADDkm">
-            <label for="title">Tên Khuyến Mãi:</label>
-            <input type="text" name="title" required><br>
-
-            <label for="description">Mô Tả Khuyến Mãi:</label>
-            <input type="text" name="description" required><br>
-
-            <label for="startTime">Thời Gian Bắt Đầu:</label>
-            <input type="date" name="startTime" required><br>
-
-            <label for="endTime">Thời Gian Kết Thúc:</label>
-            <input type="date" name="endTime" required><br>
-
-            <button type="button" id="submitBtn">Submit</button>
+            <button type="submit" onclick="submitFormAddPromotion(event)">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Thêm
+            </button>
         </form>
         <script>
-            const formADDkm = document.querySelector('#addKhuyenMaiform');
-            const submitBtn = document.querySelector('#submitBtn');
 
-            submitBtn.addEventListener('click', function () {
-                let title = formADDkm.querySelector('input[name="title"]').value;
-                let description = formADDkm.querySelector('input[name="description"]').value;
-                let startTime = formADDkm.querySelector('input[name="startTime"]').value;
-                let endTime = formADDkm.querySelector('input[name="endTime"]').value;
+            function submitFormAddPromotion(event) {
+                event.preventDefault(); // Chặn sự kiện submit form mặc định
+                const xhr = new XMLHttpRequest();
+                const form = document.getElementById("addKhuyenMaiform");
+                const outputDiv = document.querySelector('#output');
+                xhr.open("POST", "http://127.0.0.1:5000/api/promotion/add");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (this.status === 200) {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
 
-                var xhttp = new XMLHttpRequest();
-                var url = 'http://127.0.0.1:5000/api/promotion/add';
-                xhttp.open('POST', url, true);
-                xhttp.setRequestHeader('Content-type', 'application/json');
-                var data = JSON.stringify({ title, description, startTime, endTime });
-                xhttp.send(data);
-            });
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Thêm khuyến mãi Thành Công!';
+                            outputDiv.style.background = 'green';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+
+                    } else {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Mã Khuyến Mãi không Hợp Lệ!';
+                            outputDiv.style.background = '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+                    }
+                };
+
+                const formData = new FormData(form);
+                const payload = {
+                    promotionid: formData.get("promotionid"),
+                    title: formData.get("title"),
+                    description: formData.get("description"),
+                    startTime: formData.get("startTime"),
+                    endTime: formData.get("endTime")
+                };
+
+                xhr.send(JSON.stringify(payload));
+            }
         </script>
-
     </div>
     <!-- Add Khuyen Mai End -->
 
@@ -514,31 +804,34 @@
     <div id="SuaKhuyenMai" class="SuaKhuyenMai">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Sửa Khuyến Mãi</h4>
-        <form id="suaKhuyenMaiform">
-
+        <form id="suaKhuyenMaiform" action='http://127.0.0.1:5000/api/promotion/update' method="POST">
 
             <div class="user-box">
-                <input type="text" name="name">
+                <input type="text" name="promotionid" required>
+                <label>Mã Khuyến Mãi <sup style="color: red; font-size: 100%;">*</sup></label>
+            </div>
+
+            <div class="user-box">
+                <input type="text" name="title">
                 <label>Tên Khuyến Mãi </label>
             </div>
 
-
             <div class="user-box">
-                <input type="text" name="info">
+                <input type="text" name="description">
                 <label> Mô Tả Khuyến Mãi </label>
             </div>
 
             <div class="user-box">
-                <input type="date" name="time-start" class="custom-date" value="2023-03-23">
+                <input type="date" name="startTime" class="custom-date">
                 <label> Thời Gian Bắt Đầu </label>
             </div>
 
             <div class="user-box">
-                <input type="date" class="custom-date" name="time-end" value="2023-03-24">
+                <input type="date" class="custom-date" name="endTime">
                 <label> Thời Gian Kết Thúc </label>
             </div>
 
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormUpdatePromotion(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -546,15 +839,72 @@
                 Sửa
             </button>
         </form>
-
     </div>
+
+    <script>
+        function submitFormUpdatePromotion(event) {
+            event.preventDefault(); // Chặn sự kiện submit form mặc định
+            const xhr = new XMLHttpRequest();
+            const form = document.getElementById("suaKhuyenMaiform");
+            const outputDiv = document.querySelector('#output');
+
+            xhr.open("POST", "http://127.0.0.1:5000/api/promotion/update");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    if (this.status === 200) {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Sửa Khuyến Mãi Thành Công!';
+                            outputDiv.style.background = 'green';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+
+                    } else {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Mã Khuyến Mãi không Hợp Lệ!';
+                            outputDiv.style.background = '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+                    }
+                }
+            };
+
+            const formData = new FormData(form);
+            const payload = {
+                promotionid: formData.get("promotionid"),
+                title: formData.get("title"),
+                description: formData.get("description"),
+                startTime: formData.get("startTime"),
+                endTime: formData.get("endTime")
+            };
+
+            xhr.send(JSON.stringify(payload));
+        }
+    </script>
     <!-- Sua Khuyen Mai End -->
 
-    <!-- Xoa Khuyen Mai -->x`
+    <!-- Xoa Khuyen Mai -->
     <div id="XoaKhuyenMai" class="XoaKhuyenMai">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Xóa Khuyến Mãi</h4>
-        <form id="xoaKhuyenMaiform">
+        <form id="xoaKhuyenMaiform" action='http://127.0.0.1:5000/api/promotion/delete' method="POST">
 
 
             <div class="user-box">
@@ -563,7 +913,7 @@
             </div>
 
 
-            <button type="submit" name="btn">
+            <button type="submit" onclick="submitFormDeletePromotion(event)">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -573,6 +923,59 @@
         </form>
 
     </div>
+    <script>
+        function submitFormDeletePromotion(event) {
+            event.preventDefault(); // Chặn sự kiện submit form mặc định
+            const xhr = new XMLHttpRequest();
+            const form = document.getElementById("xoaKhuyenMaiform");
+            const outputDiv = document.querySelector('#output');
+
+            xhr.open("POST", "http://127.0.0.1:5000/api/promotion/delete");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    if (this.status === 200) {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Xoá Thành Công!';
+                            outputDiv.style.background = 'green';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+
+                    } else {
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
+
+                        setTimeout(function () {
+                            outputDiv.innerHTML = 'Mã Khuyến Mãi không Hợp Lệ!';
+                            outputDiv.style.background = '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
+                    }
+                }
+            };
+
+            const formData = new FormData(form);
+            const payload = {
+                promotionid: formData.get("promotionid"),
+            };
+
+            xhr.send(JSON.stringify(payload));
+        }
+    </script>
     <!-- Xóa Khuyen Mai End -->
 
 
@@ -590,11 +993,6 @@
         </div>
     </div>
 
-
-
-
-
-    <!-- <script src="../../Controllers/controller/logout.js"></script> -->
     <script>
         $(window).on('load', function () {
             $("#preloader").fadeOut();
