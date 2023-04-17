@@ -15,15 +15,15 @@ module.exports = {
 async function renderTest(req, res) {
     // console.log(req);
     res.sendFile(path.join(__dirname, '../../Views/views/testmenu.html'));
-    const { getAllProduct } = require('./product');
+    // const { getAllProduct } = require('./product');
 
-    try {
-        const response = await getAllProduct(req, res);
-        const { data } = response;
-        res.render(path.join(__dirname, '../../Views/views/menu.html'), { data });
-    } catch (error) {
-        console.log(error);
-    }
+    // try {
+    //     const response = await getAllProduct(req, res);
+    //     const { data } = response;
+    //     res.render(path.join(__dirname, '../../Views/views/menu.html'), { data });
+    // } catch (error) {
+    //     console.log(error);
+    // }
 }
 function renderHomePage(req, res) {
     // console.log(req);

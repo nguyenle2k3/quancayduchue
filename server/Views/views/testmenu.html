@@ -25,32 +25,32 @@
 		}
 	</style>
 
+
 	<script>
 
 		fetch('http://localhost:5000/client/datamenu')
-			.then(response => response.json()) // Chuyển đổi dữ liệu từ định dạng JSON sang đối tượng JavaScript
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				return response.json();
+			})
 			.then(data => {
-				// Trích xuất thông tin từ dữ liệu lấy được
 				const products = data.products;
 
-				// Tạo phần tử HTML và hiển thị dữ liệu lên HTML
-				const container = document.getElementById('hehe'); // Đổi 'container' thành ID của phần tử HTML chứa dữ liệu
+				const container = document.getElementById('hehe');
 
-				// Xóa bỏ nội dung cũ trong container (nếu có)
 				container.innerHTML = '';
 
-				// Lặp qua từng sản phẩm trong mảng products
 				products.forEach(product => {
 					const productId = product.productid;
 					const title = product.title;
 					const tag = product.tag;
 					const price = product.price;
 
-					// Tạo phần tử li để hiển thị thông tin của sản phẩm
 					const listItem = document.createElement('li');
 					listItem.innerHTML = `Ma San Pham: ${productId}, Title: ${title}, Tag: ${tag}, gia Tien: ${price}`;
 
-					// Thêm phần tử li vào container
 					container.appendChild(listItem);
 				});
 			})
