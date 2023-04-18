@@ -3,7 +3,6 @@ const asyncHandler = require('express-async-handler');
 
 const addContact = asyncHandler(async (req, res) => {
     const { title, address, phone, email } = req.body;
-    console.log(req.body);
     if (!title || !address || !phone || !email) {
         return res.status(400).json({
             success: false,
@@ -59,8 +58,17 @@ const deleteContact = asyncHandler(async (req, res) => {
     });
 });
 
+const getAllContacts = asyncHandler(async (req, res) => {
+    const contacts = await Contact.find({}).select('-_id -createAt -updateAt');
+    return res.status(200).json({
+        success: true,
+        contacts,
+    });
+});
+
 module.exports = {
     addContact,
     updateContact,
     deleteContact,
+    getAllContacts,
 };

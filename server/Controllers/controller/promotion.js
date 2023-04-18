@@ -13,9 +13,7 @@ const createPromotion = asyncHandler(async (req, res) => {
             mes: 'Missing inputs',
         });
     }
-    // req.body.slug = slugify(req.body.title, { replacement: '', lower: true });
     req.body.promotionid = create_id.string_to_slug(req.body.title);
-    // req.body.promotionid = req.body.slug;
     const newPromotion = await Promotion.create(req.body);
     return res.status(200).json({
         success: newPromotion ? true : false,
@@ -76,8 +74,17 @@ const deletedPromotion = asyncHandler(async (req, res) => {
         deletedPromotion: response ? 'Deleted Promotion !' : 'Somethings went wrong... ',
     });
 });
+const getAllPromotions = asyncHandler(async (req, res) => {
+    const promotions = await Promotion.find({}).select('-_id -createAt -updateAt');
+    res.status(200).json({
+        success: true,
+        promotions,
+    });
+    return;
+});
 module.exports = {
     createPromotion,
     updatePromotion,
     deletedPromotion,
+    getAllPromotions,
 };

@@ -86,11 +86,10 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getAllProduct = asyncHandler(async (req, res) => {
     const products = await Product.find({}).select('-_id -createAt -updateAt');
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         products,
     });
-    return;
 });
 
 module.exports = {

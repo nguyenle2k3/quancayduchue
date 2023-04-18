@@ -421,16 +421,16 @@
             <label id="ppp">Thể loại món: <sup style="color: red; font-size: 100%;">*</sup></label>
             <div id="split">
                 <div class="columneee">
-                    <input type="radio" name="tag" value="Đồ Lẩu" checked />
-                    <p id="ppp"> Đồ Lẩu </p>
+                    <input type="radio" name="tag" value="Lẩu" checked />
+                    <p id="ppp">Lẩu </p>
                 </div>
                 <div class="columneee">
-                    <input type="radio" name="tag" value="Đồ Nướng" />
-                    <p id="ppp">Đồ Nướng </p>
+                    <input type="radio" name="tag" value="Nướng" />
+                    <p id="ppp">Nướng </p>
                 </div>
                 <div class="columneee">
-                    <input type="radio" name="tag" value="COMBO" />
-                    <p id="ppp">COMBO</p>
+                    <input type="radio" name="tag" value="Combo" />
+                    <p id="ppp">Combo</p>
                 </div>
                 <div class="columneee">
                     <input type="radio" name="tag" value="Khác" />
@@ -538,16 +538,16 @@
             <label id="ppp">Thể loại món: </label>
             <div id="split">
                 <div class="columneee">
-                    <input type="radio" name="tag" value="Đồ Lẩu" checked />
-                    <p id="ppp"> Đồ Lẩu </p>
+                    <input type="radio" name="tag" value="Lẩu" checked />
+                    <p id="ppp">Lẩu </p>
                 </div>
                 <div class="columneee">
-                    <input type="radio" name="tag" value="Đồ Nướng" />
-                    <p id="ppp">Đồ Nướng </p>
+                    <input type="radio" name="tag" value="Nướng" />
+                    <p id="ppp">Nướng </p>
                 </div>
                 <div class="columneee">
-                    <input type="radio" name="tag" value="COMBO" />
-                    <p id="ppp">COMBO</p>
+                    <input type="radio" name="tag" value="Combo" />
+                    <p id="ppp">Combo</p>
                 </div>
                 <div class="columneee">
                     <input type="radio" name="tag" value="Khác" />
@@ -656,7 +656,7 @@
             function submitFormDeleteProduct(event) {
                 event.preventDefault(); // Chặn sự kiện submit form mặc định
                 const xhr = new XMLHttpRequest();
-                const form = document.getElementById("suaMonAnform");
+                const form = document.getElementById("xoaMonAnform");
                 const outputDiv = document.querySelector('#output');
                 xhr.open("POST", "http://127.0.0.1:5000/api/product/delete");
                 xhr.setRequestHeader("Content-Type", "application/json");

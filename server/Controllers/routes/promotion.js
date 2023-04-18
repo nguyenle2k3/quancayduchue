@@ -7,6 +7,7 @@ verifyAccessToken;
 router.post('/add', ctrls.createPromotion);
 router.post('/update', ctrls.updatePromotion);
 router.post('/delete', ctrls.deletedPromotion);
+router.get('/datapromotions', ctrls.getAllPromotions);
 
 module.exports = router;
 

@@ -193,3 +193,7 @@ del {
     border: none;
     text-align: center;
 }
+
+.box-split-center div h2 {
+    text-transform: uppercase;
+}

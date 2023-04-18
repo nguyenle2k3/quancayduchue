@@ -1,7 +1,9 @@
+const path = require('path');
 const notFound = (req, res, next) => {
     const error = new Error(`Route ${req.originalUrl} not found`);
-    res.status(404);
-    next(error);
+    // res.status(404);
+    // next(error);
+    res.sendFile(path.join(__dirname, '../../Views/views/404.html'));
 };
 
 const errHandler = (error, req, res, next) => {
