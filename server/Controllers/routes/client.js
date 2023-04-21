@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const ctrls = require('../controller/client');
 const ctrlsAdmin = require('../controller/admin');
-// const { verifyAccessToken, isAdmin } = require('../middleware/verifyToken');
 
 router.get('/home', ctrls.renderHomePage);
 router.get('/hots', ctrls.renderHotsPage);

@@ -3,13 +3,12 @@ const ctrls = require('../controller/admin');
 const { verifyAccessToken } = require('../middleware/verifyToken');
 
 router.get('/', verifyAccessToken, ctrls.renderAdminPage);
-router.post('/register', ctrls.register);
 router.post('/login', ctrls.login);
-// router.get('/current', verifyAccessToken, ctrls.getCurrent);
-router.post('/refreshtoken', ctrls.refreshAccessToken);
-router.get('/logout', ctrls.logout);
-router.get('/forgotpassword', ctrls.forgotPassword);
-router.put('/resetpassword', ctrls.resetPassword);
+router.get('/logout', verifyAccessToken, ctrls.logout);
+// router.post('/register', ctrls.register);
+// router.post('/refreshtoken', ctrls.refreshAccessToken);
+// router.get('/forgotpassword', ctrls.forgotPassword);
+// router.put('/resetpassword', ctrls.resetPassword);
 
 module.exports = router;
 

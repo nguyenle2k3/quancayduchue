@@ -17,8 +17,8 @@ fetch('http://localhost:5000/api/contact/datacontacts')
             h2.textContent = contact.title;
             p.textContent = contact.address;
 
-            li1.textContent = 'SDT:' + contact.phone;
-            li2.textContent = 'Email:' + contact.email;
+            li1.textContent = 'SDT : ' + contact.phone;
+            li2.textContent = 'Email : ' + contact.email;
 
             // Chèn các phần tử vào trong các phần tử div
             div.appendChild(h2);

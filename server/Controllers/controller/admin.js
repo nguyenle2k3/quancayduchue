@@ -61,7 +61,11 @@ const login = asyncHandler(async (req, res) => {
             httpOnly: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
-        return res.redirect('/api/admin/');
+        // return res.redirect('/api/admin/');
+        return res.status(200).json({
+            success: true,
+            mes: 'Successfully !',
+        });
     } else {
         res.status(401).json({ success: false, message: 'Sai Email Hoặc Mật Khẩu' });
     }
