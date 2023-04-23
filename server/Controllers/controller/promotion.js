@@ -6,7 +6,6 @@ const createPromotion = asyncHandler(async (req, res) => {
     const { title, description } = req.body;
     var startTime = new Date(req.body.startTime);
     var endTime = new Date(req.body.endTime);
-    console.log(startTime, endTime);
     if (!title || !description || !startTime || !endTime) {
         return res.status(400).json({
             success: false,

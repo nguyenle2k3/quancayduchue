@@ -66,10 +66,7 @@
 
                 xhttp.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        console.log('Logout successful!');
                         window.location.href = 'http://127.0.0.1:5000/';
-                    } else {
-                        console.log('Logout failed!');
                     }
                 };
 
