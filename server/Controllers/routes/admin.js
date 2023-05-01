@@ -2,8 +2,8 @@ const router = require('express').Router();
 const ctrls = require('../controller/admin');
 const { verifyAccessToken } = require('../middleware/verifyToken');
 
-router.get('/', verifyAccessToken, ctrls.renderAdminPage);
 router.post('/login', ctrls.login);
+router.get('/', [verifyAccessToken], ctrls.renderAdminPage);
 router.get('/logout', verifyAccessToken, ctrls.logout);
 // router.post('/register', ctrls.register);
 // router.post('/refreshtoken', ctrls.refreshAccessToken);

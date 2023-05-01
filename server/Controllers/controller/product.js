@@ -4,83 +4,135 @@ const create_id = require('../../utils/create_id');
 
 const addProduct = asyncHandler(async (req, res) => {
     const { title, price, tag } = req.body;
-    if (!title || !price || !tag) {
+    if (!title) {
         return res.status(400).json({
             success: false,
-            mes: 'Missing inputs',
+            mes: 'Hãy nhập tên món ăn!',
+        });
+    } else {
+        req.body.productid = create_id.string_to_slug(req.body.title);
+    }
+    if (!price) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Hãy nhập giá món ăn!',
+        });
+    } else if (price > 99999 || price < 0 || price === 0) {
+        return res.status(413).json({
+            success: false,
+            mes: 'Giá tiền không hợp lệ!',
         });
     }
-    if (req.body && req.body.title) {
-        req.body.productid = create_id.string_to_slug(req.body.title);
+    if (tag === null) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Hãy chọn phân loại món ăn!',
+        });
     }
     // if  product existed
     const product = await Product.findOne({ productid: req.body.productid });
     if (product) {
         return res.status(200).json({
             success: false,
-            mes: 'Product existed!',
+            mes: 'Món ăn đã tồn tại, hãy chọn tên món ăn khác!',
         });
     } else {
         const newProduct = await Product.create(req.body);
         return res.status(200).json({
             success: newProduct ? true : false,
-            mes: newProduct ? 'Creatte successfully !' : 'Somethings went wrong :(',
+            mes: newProduct ? 'Thêm món ăn thành công !' : 'Thêm món ăn không thành công!',
         });
     }
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-    if (Object.keys(req.body).length === 0) throw new Error('Missing inputs !');
+    // if (Object.keys(req.body).length === 0) throw new Error('Missing inputs !');
     const { productid } = req.body;
-    // Check input
-    const slug = create_id.string_to_slug(productid);
-    if (slug !== productid) {
-        return res.status(404).json({
+    if (productid === '') {
+        return res.status(400).json({
             success: false,
-            mes: 'Productid invalid !',
+            mes: 'Hãy nhập mã món ăn!',
         });
+    } else {
+        // Check input
+        const slug = create_id.string_to_slug(productid);
+        if (slug !== productid) {
+            return res.status(400).json({
+                success: false,
+                mes: 'Mã sản phẩm không đúng đinh dạng!',
+            });
+        }
     }
     // Find in database
     const product = await Product.findOne({ productid: productid });
-    if (product === null) {
+    if (!product) {
         return res.status(404).json({
             success: false,
-            mes: 'Product not found !',
+            mes: 'Không tìm thấy món ăn!',
         });
     }
-    if (req.body.title === '') req.body.title = product.title;
-    if (req.body.tag === '') req.body.tag = product.tag;
-    if (req.body.price === '') req.body.price = product.title;
+
+    var { title, tag, price, description } = req.body;
+    if (title === '' && tag === null && price === '' && description === '') {
+        return res.status(422).json({
+            success: false,
+            mes: 'Cần nhập ít nhất một thông tin để cập nhật!',
+        });
+    }
+    // if (tag === '') tag = product.tag;
+    if (req.body.title === '') {
+        req.body.title = product.title;
+    } else {
+        // tạo productid mới
+        req.body.productid = create_id.string_to_slug(title);
+    }
+    if (tag === null) req.body.tag = product.tag;
+    if (req.body.price === '') {
+        req.body.price = product.title;
+    } else if (price > 99999 || price < 0 || price === 0) {
+        return res.status(413).json({
+            success: false,
+            mes: 'Mức giá không hợp lệ!',
+        });
+    }
     if (req.body.description === '') req.body.description = product.description;
-    if (req.body.image === '') req.body.image = product.image;
-    const response = await Product.findByIdAndUpdate(product._id, req.body, { new: true });
+    const updatedProduct = await Product.findByIdAndUpdate(product._id, req.body, { new: true });
     return res.status(200).json({
-        success: response ? true : false,
-        updatedProduct: response ? response : 'Somethings went wrong... ',
+        success: updatedProduct ? true : false,
+        mes: updatedProduct ? 'Cập nhật thành công!' : 'Somethings went wrong... ',
     });
 });
 
 const deleteProduct = asyncHandler(async (req, res) => {
     const { productid } = req.body;
-    // Check input
-    const slug = create_id.string_to_slug(productid);
-    if (slug !== productid) {
-        return res.status(404).json({
+    // productid bỏ trống
+    if (productid === '') {
+        return res.status(422).json({
             success: false,
-            mes: 'Productid invalid !',
+            mes: 'Hãy điền mã món ăn!',
         });
+    } else {
+        // Check input
+        const slug = create_id.string_to_slug(productid);
+        // productid Nhập không đúng định dạng
+        if (slug !== productid) {
+            return res.status(400).json({
+                success: false,
+                mes: 'Mã món ăn không đúng định dạng!',
+            });
+        }
     }
     const product = await Product.findOne({ productid: productid });
     if (product === null) {
         return res.status(404).json({
             success: false,
-            mes: 'Product not found !',
+            mes: 'Không tìm thấy món ăn!',
         });
     }
     const response = await Product.findByIdAndDelete(product._id);
     return res.status(200).json({
         success: response ? true : false,
-        deletedProduct: response ? 'Deleted Product !' : 'Somethings went wrong... ',
+        mes: response ? 'Đã xoá món ăn!' : 'Somethings went wrong... ',
     });
 });
 

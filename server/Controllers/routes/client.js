@@ -8,6 +8,6 @@ router.get('/menu', ctrls.renderMenuPage);
 router.get('/contact', ctrls.renderContactPage);
 router.get('/aboutus', ctrls.renderAboutUsPage);
 router.get('/login', ctrls.renderLoginPage);
-router.post('/login', ctrlsAdmin.login);
+// router.post('/login', ctrlsAdmin.login);
 
 module.exports = router;

@@ -3,21 +3,42 @@ const asyncHandler = require('express-async-handler');
 
 const addContact = asyncHandler(async (req, res) => {
     const { title, address, phone, email } = req.body;
-    if (!title || !address || !phone || !email) {
+    if (!title) {
         return res.status(400).json({
             success: false,
-            mes: 'Missing inputs',
+            mes: 'Hãy nhập tên cơ sở!',
         });
     }
-    // if  information existed
+    if (!address) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Hãy nhập địa chỉ',
+        });
+    }
+    if (!phone) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Hãy nhập số điện thoại!',
+        });
+    }
+    if (!email) {
+        return res.status(400).json({
+            success: false,
+            mes: 'Hãy nhập email!',
+        });
+    }
+    // if contact existed
     const contact = await Contact.findOne({ title });
     if (contact) {
-        throw new Error('Information has existed ! ');
+        return res.status(401).json({
+            success: false,
+            mes: 'Cơ sở đã tồn tại!',
+        });
     } else {
         const newContact = await Contact.create(req.body);
         return res.status(200).json({
             success: newContact ? true : false,
-            mes: newContact ? 'Creatte successfully !' : 'Somethings went wrong :(',
+            mes: newContact ? 'Thêm mới thành công!' : 'Somethings went wrong :(',
         });
     }
 });
@@ -25,11 +46,24 @@ const addContact = asyncHandler(async (req, res) => {
 const updateContact = asyncHandler(async (req, res) => {
     if (Object.keys(req.body).length === 0) throw new Error('Missing inputs !');
     const { title } = req.body;
+    if (title === '') {
+        return res.status(400).json({
+            success: false,
+            mes: 'Hãy nhập tên cơ sở!',
+        });
+    }
     const contact = await Contact.findOne({ title });
     if (contact === null) {
         return res.status(404).json({
             success: false,
-            mes: 'Product not found !',
+            mes: 'Không tìm thấy tên cơ sở!',
+        });
+    }
+    const { address, phone, email } = req.body;
+    if (address === '' && phone === '' && email === '') {
+        return res.status(422).json({
+            success: false,
+            mes: 'Nhập ít nhất một thông tin cần thay đổi!',
         });
     }
     if (req.body.address === '') req.body.address = contact.address;
@@ -38,23 +72,29 @@ const updateContact = asyncHandler(async (req, res) => {
     const response = await Contact.findByIdAndUpdate(contact._id, req.body, { new: true });
     return res.status(200).json({
         success: response ? true : false,
-        updatedContact: response ? response : 'Somethings went wrong... ',
+        mes: response ? 'Cập nhật thành công!' : 'Somethings went wrong... ',
     });
 });
 
 const deleteContact = asyncHandler(async (req, res) => {
     const { title } = req.body;
+    if (title === '') {
+        return res.status(400).json({
+            success: false,
+            mes: 'Hãy nhập tên cơ sở!',
+        });
+    }
     const contact = await Contact.findOne({ title });
     if (contact === null) {
         return res.status(404).json({
             success: false,
-            mes: 'Contact not found !',
+            mes: 'Không tìm thấy tên cơ sở!',
         });
     }
     const response = await Contact.findByIdAndDelete(contact._id);
     return res.status(200).json({
         success: response ? true : false,
-        deletedContact: response ? 'Deleted Contact !' : 'Somethings went wrong... ',
+        mes: response ? 'Đã xoá thành công!' : 'Somethings went wrong... ',
     });
 });
 

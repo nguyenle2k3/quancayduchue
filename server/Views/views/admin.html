@@ -94,7 +94,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li onclick="openADDma()"><a href="#"><i class="fa fa-plus"></i> Thêm Món Ăn</a></li>
-                            <li onclick="openSUAma()"><a href="#"><i class="fa fa-adjust"></i> Sửa Món Ăn</a></li>
+                            <li onclick="openSUAma()"><a href="#"><i class="fa fa-adjust"></i> Cập Nhật Món Ăn</a></li>
                             <li onclick="openDELma()"><a href="#"><i class="fa fa-remove"></i> Xóa Món Ăn </a></li>
                         </ul>
                     </li>
@@ -107,7 +107,8 @@
                         <ul class="treeview-menu">
                             <li onclick="openADDkm()"><a href="#"><i class="fa fa-plus"></i> Thêm Khuyến Mãi</a>
                             </li>
-                            <li onclick="openSUAkm()"><a href="#"><i class="fa fa-adjust"></i> Sửa Khuyến Mãi</a></li>
+                            <li onclick="openSUAkm()"><a href="#"><i class="fa fa-adjust"></i> Cập Nhật Khuyến Mãi</a>
+                            </li>
                             <li onclick="openDELkm()"><a href="#"><i class="fa fa-remove"></i> Xóa Khuyến Mãi </a></li>
                         </ul>
                     </li>
@@ -118,7 +119,8 @@
                         </a>
                         <ul class="treeview-menu">
                             <li onclick="openADDnv()"><a href="#"><i class="fa fa-plus"></i> Thêm Thông Tin</a></li>
-                            <li onclick="openSUAnv()"><a href="#"><i class="fa fa-adjust"></i> Sửa Thông Tin</a></li>
+                            <li onclick="openSUAnv()"><a href="#"><i class="fa fa-adjust"></i> Cập Nhật Thông Tin</a>
+                            </li>
                             <li onclick="openDELnv()"><a href="#"><i class="fa fa-remove"></i> Xóa Thông Tin</a></li>
                         </ul>
                     </li>
@@ -164,7 +166,7 @@
             </div>
 
             <div class="user-box">
-                <input type="tel" name="phoneNumber" required>
+                <input type="text" name="phone" required>
                 <label>Số Điện Thoại <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
             <div class="user-box">
@@ -189,29 +191,15 @@
                 xhr.open("POST", "http://127.0.0.1:5000/api/contact/add");
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
-                    if (this.status === 200) {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        const res = JSON.parse(xhr.responseText);
                         setTimeout(function () {
                             closeLogin();
                         }, 1000);
 
                         setTimeout(function () {
-                            outputDiv.innerHTML = 'Thêm Thông Tin Thành Công!';
-                            outputDiv.style.background = 'green';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-
-                    } else {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
-
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Thông Tin Không Hợp Lệ!';
-                            outputDiv.style.background = '#de1f18';
+                            outputDiv.innerHTML = res.mes;
+                            outputDiv.style.background = res.success ? 'green' : '#de1f18';
                             outputDiv.style.color = 'white';
                             outputDiv.style.display = 'block';
                         }, 1000);
@@ -225,7 +213,7 @@
                 const payload = {
                     title: formData.get("title"),
                     address: formData.get("address"),
-                    phone: formData.get("phoneNumber"),
+                    phone: formData.get("phone"),
                     email: formData.get("email")
                 };
 
@@ -240,26 +228,26 @@
     <!-- Sua thong tin -->
     <div id="SuaNhanVien" class="SuaNhanVien">
         <span class="close" onclick="closeLogin()">&times;</span>
-        <h4>Sửa Thông Tin</h4>
+        <h4>Cập Nhật Thông Tin</h4>
         <form id="suaTTform"> <!-- suaNVform -->
 
             <div class="user-box">
-                <input type="text" name="title" required>
+                <input type="text" name="title" required value="">
                 <label>Tên Cơ Sở <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
             <div class="user-box">
-                <input type="text" name="address" required>
-                <label>Địa Chỉ Nhà Hàng <sup style="color: red; font-size: 100%;">*</sup></label>
+                <input type="text" name="address" value="">
+                <label>Địa Chỉ Nhà Hàng </label>
             </div>
 
             <div class="user-box">
-                <input type="tel" name="phone-number" required>
-                <label>Số Điện Thoại <sup style="color: red; font-size: 100%;">*</sup></label>
+                <input type="text" name="phone" value="">
+                <label>Số Điện Thoại </label>
             </div>
             <div class="user-box">
-                <input type="email" name="email" required>
-                <label>Email <sup style="color: red; font-size: 100%;">*</sup> </label>
+                <input type="email" name="email" value="">
+                <label>Email </label>
             </div>
 
             <button type="submit" onclick="submitFormUpdateContact(event)">
@@ -267,7 +255,7 @@
                 <span></span>
                 <span></span>
                 <span></span>
-                Sửa
+                Cập nhật
             </button>
         </form>
 
@@ -280,29 +268,15 @@
                 xhr.open("POST", "http://127.0.0.1:5000/api/contact/update");
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
-                    if (this.status === 200) {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        const res = JSON.parse(xhr.responseText);
                         setTimeout(function () {
                             closeLogin();
                         }, 1000);
 
                         setTimeout(function () {
-                            outputDiv.innerHTML = 'Sửa Thông Tin Thành Công!';
-                            outputDiv.style.background = 'green';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-
-                    } else {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
-
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Thông Tin Không Hợp Lệ!';
-                            outputDiv.style.background = '#de1f18';
+                            outputDiv.innerHTML = res.mes;
+                            outputDiv.style.background = res.success ? 'green' : '#de1f18';
                             outputDiv.style.color = 'white';
                             outputDiv.style.display = 'block';
                         }, 1000);
@@ -316,7 +290,7 @@
                 const payload = {
                     title: formData.get("title"),
                     address: formData.get("address"),
-                    phone: formData.get("phoneNumber"),
+                    phone: formData.get("phone"),
                     email: formData.get("email")
                 };
 
@@ -356,29 +330,15 @@
                 xhr.open("POST", "http://127.0.0.1:5000/api/contact/delete");
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
-                    if (this.status === 200) {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        const res = JSON.parse(xhr.responseText);
                         setTimeout(function () {
                             closeLogin();
                         }, 1000);
 
                         setTimeout(function () {
-                            outputDiv.innerHTML = 'Xóa Thông Tin Thành Công!';
-                            outputDiv.style.background = 'green';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-
-                    } else {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
-
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Không Tìm Thấy Cơ Sở Cần Xóa';
-                            outputDiv.style.background = '#de1f18';
+                            outputDiv.innerHTML = res.mes;
+                            outputDiv.style.background = res.success ? 'green' : '#de1f18';
                             outputDiv.style.color = 'white';
                             outputDiv.style.display = 'block';
                         }, 1000);
@@ -411,7 +371,7 @@
             </div>
 
             <div class="user-box">
-                <input type="number" name="price" required min="1">
+                <input type="number" name="price" required min="1" maxlength="5">
                 <label>Giá Món Ăn <sup style="color: red; font-size: 100%;">*</sup></label>
             </div>
 
@@ -460,36 +420,20 @@
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE) {
-                        if (this.status === 200) {
-                            setTimeout(function () {
-                                closeLogin();
-                            }, 1000);
+                        const res = JSON.parse(xhr.responseText);
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
 
-                            setTimeout(function () {
-                                outputDiv.innerHTML = 'Thêm Món Ăn Thành Công!';
-                                outputDiv.style.background = 'green';
-                                outputDiv.style.color = 'white';
-                                outputDiv.style.display = 'block';
-                            }, 1000);
-                            setTimeout(function () {
-                                document.getElementById('output').style.display = 'none';
-                            }, 4500);
-
-                        } else {
-                            setTimeout(function () {
-                                closeLogin();
-                            }, 1000);
-
-                            setTimeout(function () {
-                                outputDiv.innerHTML = 'Món Ăn Đã Tồn Tại !';
-                                outputDiv.style.background = '#de1f18';
-                                outputDiv.style.color = 'white';
-                                outputDiv.style.display = 'block';
-                            }, 1000);
-                            setTimeout(function () {
-                                document.getElementById('output').style.display = 'none';
-                            }, 4500);
-                        }
+                        setTimeout(function () {
+                            outputDiv.innerHTML = res.mes;
+                            outputDiv.style.background = res.success ? 'green' : '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
                     }
                 };
 
@@ -513,7 +457,7 @@
     <!-- Sua Mon An -->
     <div id="SuaMonAn" class="SuaMonAn">
         <span class="close" onclick="closeLogin()">&times;</span>
-        <h4>Sửa Món Ăn</h4>
+        <h4>Cập Nhật Món Ăn</h4>
         <form id="suaMonAnform" action='http://127.0.0.1:5000/api/product/update' method="POST">
 
 
@@ -535,7 +479,7 @@
             <label id="ppp">Thể loại món: </label>
             <div id="split">
                 <div class="columneee">
-                    <input type="radio" name="tag" value="Lẩu" checked />
+                    <input type="radio" name="tag" value="Lẩu" />
                     <p id="ppp">Lẩu </p>
                 </div>
                 <div class="columneee">
@@ -563,7 +507,7 @@
                 <span></span>
                 <span></span>
                 <span></span>
-                Sửa
+                Cập nhật
             </button>
         </form>
 
@@ -578,36 +522,20 @@
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE) {
-                        if (this.status === 200) {
-                            setTimeout(function () {
-                                closeLogin();
-                            }, 1000);
+                        const res = JSON.parse(xhr.responseText);
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
 
-                            setTimeout(function () {
-                                outputDiv.innerHTML = 'Sửa Món Ăn Thành Công!';
-                                outputDiv.style.background = 'green';
-                                outputDiv.style.color = 'white';
-                                outputDiv.style.display = 'block';
-                            }, 1000);
-                            setTimeout(function () {
-                                document.getElementById('output').style.display = 'none';
-                            }, 4500);
-
-                        } else {
-                            setTimeout(function () {
-                                closeLogin();
-                            }, 1000);
-
-                            setTimeout(function () {
-                                outputDiv.innerHTML = 'Mã Món Ăn Không Hợp Lệ!';
-                                outputDiv.style.background = '#de1f18';
-                                outputDiv.style.color = 'white';
-                                outputDiv.style.display = 'block';
-                            }, 1000);
-                            setTimeout(function () {
-                                document.getElementById('output').style.display = 'none';
-                            }, 4500);
-                        }
+                        setTimeout(function () {
+                            outputDiv.innerHTML = res.mes;
+                            outputDiv.style.background = res.success ? 'green' : '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
                     }
                 };
 
@@ -659,36 +587,20 @@
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
                     if (this.readyState === XMLHttpRequest.DONE) {
-                        if (this.status === 200) {
-                            setTimeout(function () {
-                                closeLogin();
-                            }, 1000);
+                        const res = JSON.parse(xhr.responseText);
+                        setTimeout(function () {
+                            closeLogin();
+                        }, 1000);
 
-                            setTimeout(function () {
-                                outputDiv.innerHTML = 'Xoá Món Ăn Thành Công!';
-                                outputDiv.style.background = 'green';
-                                outputDiv.style.color = 'white';
-                                outputDiv.style.display = 'block';
-                            }, 1000);
-                            setTimeout(function () {
-                                document.getElementById('output').style.display = 'none';
-                            }, 4500);
-
-                        } else {
-                            setTimeout(function () {
-                                closeLogin();
-                            }, 1000);
-
-                            setTimeout(function () {
-                                outputDiv.innerHTML = 'Mã Món Ăn Không Hợp Lệ!';
-                                outputDiv.style.background = '#de1f18';
-                                outputDiv.style.color = 'white';
-                                outputDiv.style.display = 'block';
-                            }, 1000);
-                            setTimeout(function () {
-                                document.getElementById('output').style.display = 'none';
-                            }, 4500);
-                        }
+                        setTimeout(function () {
+                            outputDiv.innerHTML = res.mes;
+                            outputDiv.style.background = res.success ? 'green' : '#de1f18';
+                            outputDiv.style.color = 'white';
+                            outputDiv.style.display = 'block';
+                        }, 1000);
+                        setTimeout(function () {
+                            document.getElementById('output').style.display = 'none';
+                        }, 4500);
                     }
                 };
 
@@ -750,29 +662,15 @@
                 xhr.open("POST", "http://127.0.0.1:5000/api/promotion/add");
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function () {
-                    if (this.status === 200) {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        const res = JSON.parse(xhr.responseText);
                         setTimeout(function () {
                             closeLogin();
                         }, 1000);
 
                         setTimeout(function () {
-                            outputDiv.innerHTML = 'Thêm khuyến mãi Thành Công!';
-                            outputDiv.style.background = 'green';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-
-                    } else {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
-
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Mã Khuyến Mãi không Hợp Lệ!';
-                            outputDiv.style.background = '#de1f18';
+                            outputDiv.innerHTML = res.mes;
+                            outputDiv.style.background = res.success ? 'green' : '#de1f18';
                             outputDiv.style.color = 'white';
                             outputDiv.style.display = 'block';
                         }, 1000);
@@ -800,7 +698,7 @@
     <!-- Sua Khuyen Mai -->
     <div id="SuaKhuyenMai" class="SuaKhuyenMai">
         <span class="close" onclick="closeLogin()">&times;</span>
-        <h4>Sửa Khuyến Mãi</h4>
+        <h4>Cập Nhật Khuyến Mãi</h4>
         <form id="suaKhuyenMaiform" action='http://127.0.0.1:5000/api/promotion/update' method="POST">
 
             <div class="user-box">
@@ -819,7 +717,7 @@
             </div>
 
             <div class="user-box">
-                <input type="date" name="startTime" class="custom-date">
+                <input type="date" class="custom-date" name="startTime">
                 <label> Thời Gian Bắt Đầu </label>
             </div>
 
@@ -833,7 +731,7 @@
                 <span></span>
                 <span></span>
                 <span></span>
-                Sửa
+                Cập nhật
             </button>
         </form>
     </div>
@@ -850,36 +748,20 @@
 
             xhr.onreadystatechange = function () {
                 if (this.readyState === XMLHttpRequest.DONE) {
-                    if (this.status === 200) {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
+                    const res = JSON.parse(xhr.responseText)
+                    setTimeout(function () {
+                        closeLogin();
+                    }, 1000);
 
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Sửa Khuyến Mãi Thành Công!';
-                            outputDiv.style.background = 'green';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-
-                    } else {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
-
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Mã Khuyến Mãi không Hợp Lệ!';
-                            outputDiv.style.background = '#de1f18';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-                    }
+                    setTimeout(function () {
+                        outputDiv.innerHTML = res.mes;
+                        outputDiv.style.background = res.success ? 'green' : '#de1f18';
+                        outputDiv.style.color = 'white';
+                        outputDiv.style.display = 'block';
+                    }, 1000);
+                    setTimeout(function () {
+                        document.getElementById('output').style.display = 'none';
+                    }, 4500);
                 }
             };
 
@@ -901,7 +783,7 @@
     <div id="XoaKhuyenMai" class="XoaKhuyenMai">
         <span class="close" onclick="closeLogin()">&times;</span>
         <h4>Xóa Khuyến Mãi</h4>
-        <form id="xoaKhuyenMaiform" action='http://127.0.0.1:5000/api/promotion/delete' method="POST">
+        <form id="xoaKhuyenMaiform">
 
 
             <div class="user-box">
@@ -932,36 +814,20 @@
 
             xhr.onreadystatechange = function () {
                 if (this.readyState === XMLHttpRequest.DONE) {
-                    if (this.status === 200) {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
+                    const res = JSON.parse(xhr.responseText)
+                    setTimeout(function () {
+                        closeLogin();
+                    }, 1000);
 
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Xoá Thành Công!';
-                            outputDiv.style.background = 'green';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-
-                    } else {
-                        setTimeout(function () {
-                            closeLogin();
-                        }, 1000);
-
-                        setTimeout(function () {
-                            outputDiv.innerHTML = 'Mã Khuyến Mãi không Hợp Lệ!';
-                            outputDiv.style.background = '#de1f18';
-                            outputDiv.style.color = 'white';
-                            outputDiv.style.display = 'block';
-                        }, 1000);
-                        setTimeout(function () {
-                            document.getElementById('output').style.display = 'none';
-                        }, 4500);
-                    }
+                    setTimeout(function () {
+                        outputDiv.innerHTML = res.mes;
+                        outputDiv.style.background = res.success ? 'green' : '#de1f18';
+                        outputDiv.style.color = 'white';
+                        outputDiv.style.display = 'block';
+                    }, 1000);
+                    setTimeout(function () {
+                        document.getElementById('output').style.display = 'none';
+                    }, 4500);
                 }
             };
 
