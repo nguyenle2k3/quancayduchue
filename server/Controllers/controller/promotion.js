@@ -108,6 +108,13 @@ const updatePromotion = asyncHandler(async (req, res) => {
     } else {
         // tạo mới promotionid theo title
         req.body.promotionid = create_id.string_to_slug(title);
+        const isExisted = await Promotion.findOne({ promotionid: req.body.promotionid });
+        if (isExisted) {
+            return res.status(400).json({
+                success: false,
+                mes: 'Tên khuyến mãi bị trùng, tạo mã không thành công!',
+            });
+        }
     }
     if (req.body.description === '') req.body.description = promotion.description;
     const response = await Promotion.findByIdAndUpdate(promotion._id, req.body, { new: true });

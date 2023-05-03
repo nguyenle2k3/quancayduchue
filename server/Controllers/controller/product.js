@@ -1,6 +1,7 @@
 const Product = require('../../Models/models/product');
 const asyncHandler = require('express-async-handler');
 const create_id = require('../../utils/create_id');
+const { checkPrice, delZeroInFirst } = require('../../utils/checkPrice');
 
 const addProduct = asyncHandler(async (req, res) => {
     const { title, price, tag } = req.body;
@@ -17,11 +18,13 @@ const addProduct = asyncHandler(async (req, res) => {
             success: false,
             mes: 'Hãy nhập giá món ăn!',
         });
-    } else if (price > 99999 || price < 0 || price === 0) {
+    } else if (!checkPrice) {
         return res.status(413).json({
             success: false,
-            mes: 'Giá tiền không hợp lệ!',
+            mes: 'Giá tiền không hợp lệ! (1 -> 9999)',
         });
+    } else {
+        req.body.price = delZeroInFirst(price);
     }
     if (tag === null) {
         return res.status(400).json({

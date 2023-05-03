@@ -1,5 +1,6 @@
 const Contact = require('../../Models/models/contact');
 const asyncHandler = require('express-async-handler');
+const { isPhoneNumber } = require('../../utils/isPhoneNumber');
 
 const addContact = asyncHandler(async (req, res) => {
     const { title, address, phone, email } = req.body;
@@ -20,6 +21,13 @@ const addContact = asyncHandler(async (req, res) => {
             success: false,
             mes: 'Hãy nhập số điện thoại!',
         });
+    } else {
+        if (!isPhoneNumber(phone)) {
+            return res.status(400).json({
+                success: false,
+                mes: 'Số điện thoại không hợp lệ!',
+            });
+        }
     }
     if (!email) {
         return res.status(400).json({
@@ -67,7 +75,16 @@ const updateContact = asyncHandler(async (req, res) => {
         });
     }
     if (req.body.address === '') req.body.address = contact.address;
-    if (req.body.phone === '') req.body.phone = contact.phone;
+    if (req.body.phone === '') {
+        req.body.phone = contact.phone;
+    } else {
+        if (!isPhoneNumber(phone)) {
+            return res.status(400).json({
+                success: false,
+                mes: 'Số điện thoại không hợp lệ!',
+            });
+        }
+    }
     if (req.body.email === '') req.body.email = contact.email;
     const response = await Contact.findByIdAndUpdate(contact._id, req.body, { new: true });
     return res.status(200).json({

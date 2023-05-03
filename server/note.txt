@@ -1,1 +1,0 @@
-mongoexport --db=quancayduchue --collection=products --out=D:\MegaSync\MegaSync\NotePad\ICTU_\BTL\CNPM\DH\duchueproject\server\Models/data.json
